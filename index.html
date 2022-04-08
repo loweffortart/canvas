@@ -1,0 +1,133 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="css/main.css">
+<script src="js/sketchpad.js"></script>
+
+<title>Sketchpad</title>
+
+</head>
+
+<body>
+
+<div id="top-bar" class="top-bar">
+  <div style="text-align: left;"><i class="fas fa-undo button" id="undo-button" onclick="sketchpad.undo()"></i></div>
+  <div style="text-align: center; width: 80%"><span style="font-size:1.5em"> Low effort canvas </span></div>
+  <div style="text-align: right;"><i class="fas fa-redo button" id="redo-button" onclick="sketchpad.redo()"></i></div>
+</div>
+
+<hr>
+
+<div id="palette-bar" style="text-align: center"></div>
+
+<hr>
+
+<div class="sketchpad">
+  <canvas id="sketchpad"></canvas>
+</div>
+
+<hr>
+
+<div id="bottom-bar" class="top-bar">
+
+  <div class="dropdown" style="text-align: left">
+    <i class="fas fa-user button" id="select-user-button" onclick="open_user_dropdown()"></i>
+    <div id="user-dropdown" class="w3-dropdown-content w3-bar-block w3-border"></div>
+  </div>
+  <span  id="username"></span>
+
+  <div style="width:80%"></div>
+
+  <div style="text-align: right;"><i class="fas fa-paper-plane button" id="send-button" onclick="submit_drawing()"></i></div>
+
+</div>
+
+
+<script>
+
+var sketchpad = new Sketchpad({
+    element: '#sketchpad',
+    width: window.innerWidth,
+    height: window.innerHeight,
+    scale: 4.0,
+  });
+
+console.log(window.innerWidth, window.innerHeight)
+
+
+var palette = new ColorPalette({
+  div: '#palette-bar',
+  sketchpad: sketchpad,
+  colors: ['#FFFFFF', '#050505', '#248DC9', '#00CD00', '#FFCF00', '#F82000', '#FF9806', '#FF59BF', '#9B00F1', '#AF5100', '#633101', '#EBBA47', '#EC4D76', '#941251', '#6DA0C2', '#9C954A', '#757575']
+})
+
+// populate user select dropdown
+let users = ['Keya', 'Nishanth', 'Ramith', 'Snehal', 'Somya', 'Sundar', 'Tushar', 'Vaish']
+users.forEach(function(user){
+  let uspan = $(`<span class="w3-bar-item w3-button">${user}</span>`)
+  uspan.click(()=>select_user(user))
+  $('#user-dropdown').append(uspan)
+})
+
+function open_user_dropdown(){
+  $('#user-dropdown').addClass('w3-show')
+}
+
+function select_user(user){
+  $('#username').text(user)
+  $('#user-dropdown').removeClass('w3-show')
+}
+
+function submit_drawing(){
+
+  let user = $('#username').text()
+  if (user.length==0){
+    alert('Please select an artist first! (bottom left)')
+    return
+  }
+
+  let canvas = document.querySelector('#sketchpad')
+  let img = canvas.toDataURL("image/png", 1.0);
+  const endpoint = "https://wge511aw09.execute-api.us-east-1.amazonaws.com/prod"
+  const success_msg = `
+    <div align="center">
+      Your image has been submitted successfully. 
+      Admire it in all its glory here 
+    </div>
+  `
+
+  let payload = `{
+    "img": "${img}",
+    "user": "${user}"
+  }`
+
+  $.ajax({
+      type: 'POST',
+      url: endpoint,
+      data: payload,
+      dataType: 'json',
+      success: function(responseData, textStatus, jqXHR) {
+          let value = responseData.body.result;
+          document.write(success_msg)
+          document.write(`<img src="${img}"/>`);
+      },
+      error: function (responseData, textStatus, errorThrown) {
+          alert('POST failed.')
+      }
+  })
+
+  document.write(success_msg)
+  document.write(`<img src="${img}"/>`);
+}
+
+
+</script>
+
+
+</body>
+</html>
