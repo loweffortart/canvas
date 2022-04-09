@@ -17,6 +17,7 @@ hr {
   cursor: crosshair;
   background-color:#FFF;
   width: 100%;
+  height: 85%;
 }
 
 .button {
@@ -48,6 +49,7 @@ hr {
   position: fixed;
   bottom: 0;
   width: 100%;
+  height: 5%;
 }
 
 .hidden {
