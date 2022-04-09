@@ -1,5 +1,6 @@
 html, body {
-  overflow: hidden
+  overflow: hidden;
+  user-select: none;
 }
 
 hr {
@@ -16,35 +17,11 @@ hr {
   cursor: crosshair;
   background-color:#FFF;
   width: 100%;
-  height: 82%;
 }
 
 .button {
-  font-size: 1.5em;
+  font-size: 1.5rem;
   cursor: pointer;
-}
-
-.top-bar {
-  padding: 0.25em;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  display: flex;
-  align-items: center;
-}
-
-.top-bar div {
-  float: left;
-  width: 10%;
-}
-
-.top-bar:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-li:not(.active) > a {
-    color: grey;
 }
 
 .dot > .outer-dot {
@@ -62,26 +39,16 @@ li:not(.active) > a {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
 #palette-bar::-webkit-scrollbar {
   display: none;
 }
 
-#bottom-bar div {
-  float: left;
-  width: 10%;
+.navbar-bottom {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
-
-.dropup {
-  position: relative;
-  display: inline-block;
-}
-
-#user-dropdown {
-  position: absolute;
-  z-index: 1;
-  bottom: 7em;
-}
-
 
 .hidden {
   display: none;

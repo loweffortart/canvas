@@ -41,7 +41,9 @@
   </div>
 </div>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-top">
   <div class="container-fluid">
       <i class="fas fa-undo button" id="undo-button" onclick="sketchpad.undo()"></i>
       <h3> Low effort canvas </h3>
@@ -61,7 +63,7 @@
 
 <hr>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-bottom">
   <div class="container-fluid">
       <div>
         <i class="fas fa-user button" onclick="logout()"></i>
@@ -72,18 +74,20 @@
 </nav>
 
 
+</div>
+
 <script>
 
 function submit_drawing(){
-
   let canvas = document.querySelector('#sketchpad')
   let img = canvas.toDataURL("image/png", 1.0);
-  const endpoint = "https://VVV.execute-api.us-east-1.amazonaws.com/prod"
+  const endpoint = "https://6nglonho1l.execute-api.us-east-1.amazonaws.com/default/low-effort-discord"
   const success_msg = `
     <div align="center">
       Your image has been submitted successfully. 
       Admire it in all its glory here 
     </div>
+    <img style="max-width: 100%;height: auto" src="${img}"/>
   `
   let uid = $('#user-button').attr('uid')
   let payload = `{
@@ -91,25 +95,21 @@ function submit_drawing(){
     "uid": "${uid}"
   }`
 
-  console.log(uid)
-
-  // $.ajax({
-  //     type: 'POST',
-  //     url: endpoint,
-  //     data: payload,
-  //     dataType: 'json',
-  //     success: function(responseData, textStatus, jqXHR) {
-  //         let value = responseData.body.result;
-  //         document.write(success_msg)
-  //         document.write(`<img src="${img}"/>`);
-  //     },
-  //     error: function (responseData, textStatus, errorThrown) {
-  //         alert('POST failed.')
-  //     }
-  // })
+  $.ajax({
+    type: 'POST',
+    url: endpoint,
+    data: payload,
+    dataType: 'json',
+    success: function(responseData, textStatus, jqXHR) {
+      let value = responseData.body.result;
+    },
+    error: function (responseData, textStatus, errorThrown) {
+      // alert('POST failed.')
+    }
+  })
 
   document.write(success_msg)
-  document.write(`<img src="${img}"/>`);
+  
 }
 
 var sketchpad = new Sketchpad({
