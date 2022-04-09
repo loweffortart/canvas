@@ -52,6 +52,10 @@ hr {
   height: 5%;
 }
 
+#login-input div {
+  padding: 2px;
+}
+
 .hidden {
   display: none;
 }
